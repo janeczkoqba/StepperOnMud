@@ -1,0 +1,30 @@
+﻿@code {
+    [CascadingParameter] public MyMudStepper MyMudStepper { get; set; } = default!;
+    [Parameter, EditorRequired] public string Title { get; set; } = default!;
+    [Parameter] public RenderFragment ChildContent { get; set; } = default!;
+
+    public bool IsActive { get; private set; } = false;
+    public bool HasError { get; private set; } = false;
+
+    public void ToggleActive(bool value)
+    {
+        IsActive = value;
+        MyMudStepper.ForceStateChange();
+    }
+
+    public void ToggleError(bool value)
+    {
+        HasError = value;
+        MyMudStepper.ForceStateChange();
+    }
+
+    protected override void OnInitialized()
+    {
+        MyMudStepper.AddStep(this);
+    }
+
+     public void Dispose()
+    {
+        MyMudStepper.RemoveStep(this);
+    }
+}

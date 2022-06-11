@@ -1,0 +1,23 @@
+﻿@page "/stepper"
+
+<MyMudStepper @ref="_stepper">
+    <MyMudStep Title="Step 1" @ref="_steps[0]">
+        <StepperOnMud.Components.Step1 />
+    </MyMudStep>
+
+    <MyMudStep Title="Step 2" @ref="_steps[1]">
+        <MudButton OnClick="() => _stepper.PreviousStep()">Previous</MudButton>
+        <MudButton OnClick="() => _stepper.NextStep()">Next</MudButton>
+        <MudButton OnClick="() => _steps[1].ToggleError(!_steps[1].HasError)">Toggle error</MudButton>
+        <MudButton OnClick="() => _steps[2].ToggleActive(!_steps[2].IsActive)">Toggle next step</MudButton>
+    </MyMudStep>
+
+    <MyMudStep Title="Step 3" @ref="_steps[2]">
+        <MudButton OnClick="() => _stepper.PreviousStep()">Previous</MudButton>
+    </MyMudStep>
+</MyMudStepper>
+
+@code {
+    private MyMudStepper _stepper = default!;
+    private MyMudStep[] _steps = new MyMudStep[3];
+}

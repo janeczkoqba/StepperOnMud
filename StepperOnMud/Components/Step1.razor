@@ -1,0 +1,14 @@
+﻿<MudButton OnClick="() => MyMudStepper.NextStep()">Next</MudButton>
+<MudButton OnClick="() => MyStep.ToggleError(!MyStep.HasError)">Toggle error</MudButton>
+
+@code {
+    [CascadingParameter] public MyMudStepper MyMudStepper { get; set; } = default!;
+    [CascadingParameter] public MyMudStep MyStep { get; set; } = default!;
+
+    public void ToggleError()
+    {
+        MyStep.ToggleError(!MyStep.HasError);
+        StateHasChanged();
+    }
+
+}

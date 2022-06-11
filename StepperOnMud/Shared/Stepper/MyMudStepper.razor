@@ -1,0 +1,67 @@
+﻿<CascadingValue Value="this">
+    @ChildContent
+    <MudTabs Elevation="2"
+             PanelClass="pa-6"
+             TabPanelClass="pa-4"
+             Class="mx-16"
+             KeepPanelsAlive="true"
+             @bind-ActivePanelIndex="activePanelIndex">
+        @foreach (var item in _steps)
+        {
+            <CascadingValue Value="item">
+                <MudTabPanel Text="@item.Title"
+                         Disabled="!item.IsActive"
+                         BadgeColor="item.HasError ? Color.Error : Color.Inherit"
+                         BadgeData='item.HasError ? "!" : string.Empty'>
+                    @item.ChildContent
+                </MudTabPanel>
+            </CascadingValue>
+        }
+    </MudTabs>
+</CascadingValue>
+
+@code {
+    [Parameter] public RenderFragment ChildContent { get; set; } = default!;
+
+    private List<MyMudStep> _steps = new List<MyMudStep>();
+    private int activePanelIndex = 0;
+
+
+    internal void ForceStateChange()
+    {
+        StateHasChanged();
+        Task.Delay(1).ContinueWith(obj => InvokeAsync(StateHasChanged));
+    }
+
+    public void PreviousStep()
+    {
+        var hasPreviousStep = activePanelIndex > 0;
+        if (hasPreviousStep)
+        {
+            _steps[--activePanelIndex].ToggleActive(true);
+            StateHasChanged();
+        }
+    }
+
+    public void NextStep()
+    {
+        var hasNextStep = activePanelIndex + 1 < _steps.Count;
+        if (hasNextStep)
+        {
+            _steps[++activePanelIndex].ToggleActive(true);
+            StateHasChanged();
+        }
+    }
+
+    public void AddStep(MyMudStep step)
+    {
+        if (_steps.Count == 0) step.ToggleActive(true);
+        _steps.Add(step);
+        StateHasChanged();
+    }
+
+    public void RemoveStep(MyMudStep step)
+    {
+        _steps.Remove(step);
+    }
+}
